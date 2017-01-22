@@ -5,14 +5,19 @@ import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 
 const AppWrapper = styled.div`
-  padding-bottom: 5em;
 `
 
 function App(props) {
+  let children = null
+  if (props.children) {
+    children = React.cloneElement(props.children, {
+      auth: props.route.auth
+    })
+  }
     return (
       <AppWrapper>
-        <Navigation />
-        {React.Children.toArray(props.children)}
+        <Navigation auth={props.route.auth} />
+        {children}
         <Footer />
       </AppWrapper>
     )

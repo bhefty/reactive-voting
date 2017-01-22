@@ -5,6 +5,7 @@ import { IntlProvider } from 'react-intl'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Routes from './routes'
+
 import './index.css';
 
 // Needed for onTouchTap
