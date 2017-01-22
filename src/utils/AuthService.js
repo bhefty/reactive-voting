@@ -2,8 +2,8 @@ import Auth0Lock from 'auth0-lock'
 import { browserHistory } from 'react-router'
 
 export default class AuthService {
-  constructor(clientId, domain) {
-    this.lock = new Auth0Lock(clientId, domain, {
+  constructor(clientId, domain, options) {
+    this.lock = new Auth0Lock(clientId, domain, options, {
       auth: {
         redirectUrl: 'http://localhost:3000/login',
         responseType: 'token'
@@ -21,6 +21,10 @@ export default class AuthService {
 
   login() {
     this.lock.show()
+  }
+
+  hideLock() {
+    this.lock.hide()
   }
 
   loggedIn() {

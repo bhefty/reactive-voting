@@ -9,11 +9,19 @@ import Welcome from './components/Welcome'
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN
-const auth = new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN)
+const options = {
+  container: 'auth-lock',
+  theme: {
+    primaryColor: '#0088FC',
+    logo: 'https://res.cloudinary.com/bhefty/image/upload/v1485070707/react_58px_flncmd.png'
+  }
+}
+const auth = new AuthService(AUTH0_CLIENT_ID, AUTH0_DOMAIN, options)
 
+// onEnter callback to validate authentication in private routes
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
-    replace({ pathname: '/welcome' })
+    replace({ pathname: '/login' })
   }
 }
 

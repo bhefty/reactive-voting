@@ -5,7 +5,6 @@ import Navigation from '../../components/Navigation'
 import Footer from '../../components/Footer'
 
 const AppWrapper = styled.div`
-  padding-bottom: 5em;
 `
 
 function App(props) {
@@ -17,7 +16,7 @@ function App(props) {
   }
     return (
       <AppWrapper>
-        <Navigation />
+        <Navigation auth={props.route.auth} />
         {children}
         <Footer />
       </AppWrapper>
