@@ -17,9 +17,17 @@ class Navigation extends Component {
       title: {
         cursor: 'pointer',
       },
-    };
+    }
+
+    let renderAuthButton
     if (this.props.auth.loggedIn()) {
-      console.log('logged in')
+      renderAuthButton = (
+        <FlatButton containerElement={<Link to="/welcome" />} onClick={() => this.props.auth.logout()}>Logout</FlatButton>
+      )
+    } else {
+      renderAuthButton = (
+        <FlatButton containerElement={<Link to="/login" />}>Login</FlatButton>
+      )
     }
 
     return (
@@ -27,7 +35,7 @@ class Navigation extends Component {
         <AppBar
           showMenuIconButton={false}
           title={<span onClick={this.handleRoute.bind(this)} style={styles.title}>Reactive Voting</span>}
-          iconElementRight={<FlatButton containerElement={<Link to="/login" />}>Login</FlatButton>}
+          iconElementRight={renderAuthButton}
         />
     </div>
     )

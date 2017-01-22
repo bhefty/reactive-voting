@@ -1,9 +1,8 @@
-import React, { PropTypes as T } from 'react'
-// import { Link } from 'react-router'
+import React from 'react'
+import { Link } from 'react-router'
 import { FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontAwesome from 'react-fontawesome'
-import AuthService from '../../utils/AuthService'
 
 
 import H1 from './H1'
@@ -14,7 +13,7 @@ import MessageWrapper from './MessageWrapper'
 import messages from './messages';
 
 
-function Welcome(props) {
+function Welcome() {
   return (
     <div>
       <Wrapper>
@@ -25,7 +24,7 @@ function Welcome(props) {
           <FormattedMessage {...messages.welcomeMessage} />
         </P>
         <ButtonWrapper>
-          <RaisedButton fullWidth backgroundColor='#58B957' labelColor='#fff' onClick={props.auth.login} label='Signup' />
+          <RaisedButton fullWidth backgroundColor='#58B957' labelColor='#fff' containerElement={<Link to="/login" />} label='Signup' />
         </ButtonWrapper>
       </Wrapper>
 
@@ -62,10 +61,6 @@ function Welcome(props) {
       </MessageWrapper>
     </div>
   )
-}
-
-Welcome.propTypes = {
-  auth: T.instanceOf(AuthService)
 }
 
 export default Welcome
