@@ -9,10 +9,16 @@ const AppWrapper = styled.div`
 `
 
 function App(props) {
+  let children = null
+  if (props.children) {
+    children = React.cloneElement(props.children, {
+      auth: props.route.auth
+    })
+  }
     return (
       <AppWrapper>
         <Navigation />
-        {React.Children.toArray(props.children)}
+        {children}
         <Footer />
       </AppWrapper>
     )
