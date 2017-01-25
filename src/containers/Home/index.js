@@ -22,8 +22,13 @@ class Home extends Component {
       dashboardView: 'newPollForm'
     }
     this.handleView = this.handleView.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
+  onSubmit(formData) {
+    console.log(formData)
+    this.handleView('myPolls')
+  }
 
   handleView(view) {
     if (view === 'newPollForm' || view === 'myPolls') {
@@ -36,7 +41,7 @@ class Home extends Component {
     let renderView
     if (this.state.dashboardView === 'newPollForm') {
       renderView = (
-        <NewPollForm />
+        <NewPollForm onSubmit={this.onSubmit} />
       )
     } else if (this.state.dashboardView === 'myPolls') {
       renderView = (

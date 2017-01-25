@@ -11,8 +11,8 @@ import PollName from './PollName'
 import Options from './Options'
 
 class NewPollForm extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       values: {
         pollName: '',
@@ -33,7 +33,7 @@ class NewPollForm extends Component {
       <TextField
         hintText='Option'
         floatingLabelText='Option'
-        onChange={(e) => this.handleChange(e, idx)}
+        onChange={(e) => this.handleChange(e, 'opt' + idx)}
       />
     )
     this.setState({
@@ -44,7 +44,7 @@ class NewPollForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log('submitted', event)
+    this.props.onSubmit(this.state.values)
   }
 
   handleChange(event, ref) {
