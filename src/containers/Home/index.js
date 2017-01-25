@@ -59,7 +59,7 @@ class Home extends Component {
             <RaisedButton onClick={() => this.handleView('myPolls')} backgroundColor='#3E8ACC' labelColor='#fff' label='My Polls' />
           </ButtonWrapper>
         </Wrapper>
-        <MyPolls />
+        {renderView}
       </div>
     )
   }

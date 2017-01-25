@@ -17,22 +17,38 @@ class MyPolls extends Component {
         'Best framework?'
       ]
     }
+    this.handleDelete = this.handleDelete.bind(this)
   }
+
+  handleDelete(poll) {
+    let newPolls = this.state.polls
+    if (poll > -1) {
+      newPolls.splice(poll, 1)
+    }
+    this.setState({ polls: newPolls })
+  }
+
   render() {
+    let renderView
+    if (this.state.polls.length === 0) {
+      renderView = (<h4 style={{textAlign: 'center'}}>No polls at this time. Create one!</h4>)
+    } else {
+      renderView = this.state.polls.map((poll, idx) => {
+        return (
+          <ListItem
+            key={idx}
+            primaryText={poll}
+            rightIcon={<DeleteIcon hoverColor={red500} onClick={() => this.handleDelete(idx)} />}
+          />
+        )
+      })
+    }
     return (
       <Wrapper>
         <H1>My Polls</H1>
         <Paper zDepth={1} rounded={false}>
           <List>
-            {this.state.polls.map((poll, idx) => {
-              return (
-                <ListItem
-                  key={idx}
-                  primaryText={poll}
-                  rightIcon={<DeleteIcon hoverColor={red500}/>}
-                />
-              )
-            })}
+            {renderView}
           </List>
         </Paper>
       </Wrapper>

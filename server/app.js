@@ -9,16 +9,16 @@ import bodyParser from 'body-parser'
 
 const app = new Express()
 
-mongoose.Promise = global.Promise
-const MONGO_URI = process.env.REACT_APP_MONGO_URI || 'mongodb://localhost/reactive-voting-dev'
-mongoose.connect(MONGO_URI, (error) => {
-  if (error) {
-    console.error('Please make sure Mongodb is installed and running!')
-    throw error
-  }
-  console.log('Connected to DB!')
-  // dummyData()
-})
+// mongoose.Promise = global.Promise
+// const MONGO_URI = process.env.REACT_APP_MONGO_URI || 'mongodb://localhost/reactive-voting-dev'
+// mongoose.connect(MONGO_URI, (error) => {
+//   if (error) {
+//     console.error('Please make sure Mongodb is installed and running!')
+//     throw error
+//   }
+//   console.log('Connected to DB!')
+//   // dummyData()
+// })
 
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
 app.use(bodyParser.json({ lmit: '20mb' }))
