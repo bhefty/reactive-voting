@@ -14,14 +14,14 @@ class MyPolls extends Component {
       myPolls: []
     }
     this.handleDelete = this.handleDelete.bind(this)
-    this.updatePollList = this.updatePollList.bind(this)
+    this.getPollList = this.getPollList.bind(this)
   }
 
   componentDidMount() {
-    this.updatePollList()
+    this.getPollList()
   }
 
-  updatePollList() {
+  getPollList() {
     let newPolls = this.state.myPolls
     fetch(`/api/polls/${this.props.author}`, {
       method: 'get',
@@ -34,18 +34,23 @@ class MyPolls extends Component {
       })
       .then((pollJSON) => {
         pollJSON.map((poll) => {
-          newPolls.push(poll.title)
+          return newPolls.push(poll)
         })
         this.setState({myPolls: newPolls})
       })
   }
 
-  handleDelete(poll) {
-    let newPolls = this.state.myPolls
-    if (poll > -1) {
-      newPolls.splice(poll, 1)
-    }
-    this.setState({ myPolls: newPolls })
+  handleDelete(poll, idx) {
+    fetch(`/api/polls/remove/${poll.cuid}`, {
+      method: 'delete'
+    })
+      .then(() => {
+        let newPolls = this.state.myPolls
+        if (idx > -1) {
+          newPolls.splice(idx, 1)
+        }
+        this.setState({ myPolls: newPolls })
+      })
   }
 
   render() {
@@ -57,8 +62,8 @@ class MyPolls extends Component {
         return (
           <ListItem
             key={idx}
-            primaryText={poll}
-            rightIcon={<DeleteIcon hoverColor={red500} onClick={() => this.handleDelete(idx)} />}
+            primaryText={poll.title}
+            rightIcon={<DeleteIcon hoverColor={red500} onClick={() => this.handleDelete(poll, idx)} />}
           />
         )
       })
