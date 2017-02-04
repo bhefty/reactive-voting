@@ -42,3 +42,15 @@ export function addPoll(req, res) {
     res.send(saved)
   })
 }
+
+export function deletePoll(req, res) {
+  let id = req.params.id
+  Poll.findOneAndRemove({
+    cuid: id
+  }, (err, poll) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+    res.send(poll)
+  })
+}

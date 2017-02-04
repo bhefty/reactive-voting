@@ -11,4 +11,7 @@ router.route('/polls/:author').get(PollController.getPollsByAuthor)
 // Add a new Poll
 router.route('/polls').post(PollController.addPoll)
 
+// Delete a Poll
+router.route('/polls/remove/:id').delete(PollController.deletePoll)
+
 export default router
