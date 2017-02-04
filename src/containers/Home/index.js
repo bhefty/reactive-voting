@@ -16,22 +16,37 @@ import messages from './messages'
 
 
 class Home extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      dashboardView: 'newPollForm'
+      dashboardView: 'newPollForm',
+      profile: props.auth.getProfile()
     }
     this.handleView = this.handleView.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   onSubmit(formData) {
-    console.log(formData)
-    this.handleView('myPolls')
+    const pollData = {
+      author: this.state.profile.user_id,
+      title: formData.pollName
+    }
+    let choices = Object.values(formData).splice(1)
+    pollData.options = choices.map((choice) => {
+      return { choice: choice }
+    })
+    fetch('/api/polls', {
+      method: 'post',
+      body: JSON.stringify(pollData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(() => this.handleView('pollSubmitted'))
   }
 
   handleView(view) {
-    if (view === 'newPollForm' || view === 'myPolls') {
+    if (view === 'newPollForm' || view === 'myPolls' || view === 'pollSubmitted') {
       this.setState({
         dashboardView: view
       })
@@ -45,7 +60,11 @@ class Home extends Component {
       )
     } else if (this.state.dashboardView === 'myPolls') {
       renderView = (
-        <MyPolls />
+        <MyPolls author={this.state.profile.user_id}/>
+      )
+    } else if (this.state.dashboardView === 'pollSubmitted') {
+      renderView = (
+        <PollSubmitted />
       )
     }
     return (
