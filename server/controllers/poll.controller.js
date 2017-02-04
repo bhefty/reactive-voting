@@ -5,7 +5,7 @@ import sanitizeHtml from 'sanitize-html'
 export function getPolls(req, res) {
   Poll.find({}, (err, polls) => {
     if (err) {
-      res.stats(500).send(err)
+      res.status(500).send(err)
     }
     res.send(polls)
   })

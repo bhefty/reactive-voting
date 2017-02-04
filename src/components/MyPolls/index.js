@@ -11,29 +11,49 @@ class MyPolls extends Component {
   constructor() {
     super()
     this.state = {
-      polls: [
-        'Best Coffee?',
-        'Best movie?',
-        'Best framework?'
-      ]
+      myPolls: []
     }
     this.handleDelete = this.handleDelete.bind(this)
+    this.updatePollList = this.updatePollList.bind(this)
+  }
+
+  componentDidMount() {
+    this.updatePollList()
+  }
+
+  updatePollList() {
+    let newPolls = this.state.myPolls
+    fetch(`/api/polls/${this.props.author}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((pollJSON) => {
+        pollJSON.map((poll) => {
+          newPolls.push(poll.title)
+        })
+        this.setState({myPolls: newPolls})
+      })
   }
 
   handleDelete(poll) {
-    let newPolls = this.state.polls
+    let newPolls = this.state.myPolls
     if (poll > -1) {
       newPolls.splice(poll, 1)
     }
-    this.setState({ polls: newPolls })
+    this.setState({ myPolls: newPolls })
   }
 
   render() {
     let renderView
-    if (this.state.polls.length === 0) {
+    if (this.state.myPolls.length === 0) {
       renderView = (<h4 style={{textAlign: 'center'}}>No polls at this time. Create one!</h4>)
     } else {
-      renderView = this.state.polls.map((poll, idx) => {
+      renderView = this.state.myPolls.map((poll, idx) => {
         return (
           <ListItem
             key={idx}
