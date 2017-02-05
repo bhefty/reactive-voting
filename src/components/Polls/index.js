@@ -43,7 +43,7 @@ class Polls extends Component {
           <ListItem
             key={idx}
             primaryText={poll.title}
-            containerElement={<Link to={`/polls/${poll.cuid}`} />}
+            containerElement={<Link to={`/polls/${poll._id}`} />}
           />
         )
       })

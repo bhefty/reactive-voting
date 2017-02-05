@@ -11,6 +11,9 @@ router.route('/polls/:author').get(PollController.getPollsByAuthor)
 // Get specific Poll by ID
 router.route('/poll/:id').get(PollController.getPollByID)
 
+// Update numVote on Poll option
+router.route('/poll/:id/:voteID').get(PollController.updateNumVote)
+
 // Add a new Poll
 router.route('/polls').post(PollController.addPoll)
 

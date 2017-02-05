@@ -1,16 +1,18 @@
 import mongoose from 'mongoose'
+import cuid from 'cuid'
 const Schema = mongoose.Schema
 
 const optionsSchema = new Schema({
+  _id: { type: 'String', required: true, unique: true, default: cuid},
   choice: { type: 'String', required: true },
   numVotes: { type: 'Number', default: 0, required: true }
 })
 
 const pollSchema = new Schema({
+  _id: { type: 'String', required: true, unique: true, default: cuid},
   author: { type: 'String', required: true },
   title: { type: 'String', required: true },
   options: { type: [optionsSchema], required: true },
-  cuid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true }
 })
 
