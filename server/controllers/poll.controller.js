@@ -32,12 +32,21 @@ export function getPollByID(req, res) {
 export function updateNumVote(req, res) {
   console.log('id:', req.params.id)
   console.log('option id', req.params.voteID)
-  Poll.findOne({ _id: req.params.id }, (err, poll) => {
-    if (err) {
-      res.status(500).send(err)
+  Poll.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      'options._id': req.params.voteID
+    },
+    {
+      $inc: { 'options.$.numVotes': 1 }
+    },
+    (err, poll) => {
+      if (err) {
+        res.status(500).send(err)
+      }
+      res.send(poll)
     }
-    res.send(poll)
-  })
+  )
 }
 
 export function addPoll(req, res) {
