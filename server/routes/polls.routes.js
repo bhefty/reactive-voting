@@ -8,6 +8,9 @@ router.route('/polls').get(PollController.getPolls)
 // Get all Polls by Author
 router.route('/polls/:author').get(PollController.getPollsByAuthor)
 
+// Get specific Poll by ID
+router.route('/poll/:id').get(PollController.getPollByID)
+
 // Add a new Poll
 router.route('/polls').post(PollController.addPoll)
 

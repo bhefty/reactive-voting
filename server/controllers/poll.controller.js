@@ -20,6 +20,15 @@ export function getPollsByAuthor(req, res) {
   })
 }
 
+export function getPollByID(req, res) {
+  Poll.findOne({ cuid: req.params.id }, (err, poll) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+    res.send(poll)
+  })
+}
+
 export function addPoll(req, res) {
   if (!req.body.author || !req.body.title || !req.body.options) {
     res.status(403).end()
