@@ -20,6 +20,35 @@ export function getPollsByAuthor(req, res) {
   })
 }
 
+export function getPollByID(req, res) {
+  Poll.findOne({ _id: req.params.id }, (err, poll) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+    res.send(poll)
+  })
+}
+
+export function updateNumVote(req, res) {
+  console.log('id:', req.params.id)
+  console.log('option id', req.params.voteID)
+  Poll.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      'options._id': req.params.voteID
+    },
+    {
+      $inc: { 'options.$.numVotes': 1 }
+    },
+    (err, poll) => {
+      if (err) {
+        res.status(500).send(err)
+      }
+      res.send(poll)
+    }
+  )
+}
+
 export function addPoll(req, res) {
   if (!req.body.author || !req.body.title || !req.body.options) {
     res.status(403).end()
@@ -33,7 +62,6 @@ export function addPoll(req, res) {
   // // TODO: Sanitize the options without throwing error
   // // newPoll.options = sanitizeHtml(newPoll.options)
 
-  newPoll.cuid = cuid()
   newPoll.save((err, saved) => {
     if (err) {
       console.log(err)
@@ -46,7 +74,7 @@ export function addPoll(req, res) {
 export function deletePoll(req, res) {
   let id = req.params.id
   Poll.findOneAndRemove({
-    cuid: id
+    _id: id
   }, (err, poll) => {
     if (err) {
       res.status(500).send(err)

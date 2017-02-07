@@ -6,6 +6,8 @@ import App from './containers/App'
 import Home from './containers/Home'
 import Login from './containers/Login'
 import Welcome from './components/Welcome'
+import Polls from './components/Polls'
+import PollVote from './components/PollVote'
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN
@@ -32,6 +34,8 @@ const Routes = (props) => (
       <Route path='home' component={Home} onEnter={requireAuth} />
       <Route path='welcome' component={Welcome} />
       <Route path='login' component={Login} />
+      <Route path='polls' component={Polls} />
+      <Route path='polls/:pollID' component={PollVote} />
     </Route>
   </Router>
 )
