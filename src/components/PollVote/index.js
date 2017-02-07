@@ -10,10 +10,13 @@ export default class PollVote extends Component {
     super()
     this.state = {
       poll: {},
-      selected: ''
+      selected: '',
+      chartData: []
     }
     this.getPollInfo = this.getPollInfo.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.setChartData = this.setChartData.bind(this)
+    this.dynamicColors = this.dynamicColors.bind(this)
   }
 
   componentDidMount() {
@@ -29,29 +32,52 @@ export default class PollVote extends Component {
     })
       .then(response => response.json())
       .then((poll) => this.setState({poll: poll}))
+      .then(() => this.setChartData())
+  }
+
+  setChartData() {
+    let data = this.state.poll.options.map((option) => {
+      let rgb = this.dynamicColors()
+      return {
+        value: option.numVotes,
+        label: option.choice,
+        color: rgb.color,
+        highlight: rgb.highlight
+      }
+    })
+
+    this.setState({
+      chartData: data
+    })
+  }
+
+  dynamicColors() {
+    let r = Math.floor(Math.random() * 255)
+    let g = Math.floor(Math.random() * 255)
+    let b = Math.floor(Math.random() * 255)
+
+    let rH = Math.floor(r + ((255 - r) * 0.25))
+    let gH = Math.floor(g + ((255 - g) * 0.25))
+    let bH = Math.floor(b + ((255 - b) * 0.25))
+
+    return {
+      color: `rgb(${r},${g},${b})`,
+      highlight: `rgb(${rH},${gH},${bH})`
+    }
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log('Submit', this.state.selected)
+    fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+      .then(() => this.getPollInfo())
   }
 
   render() {
-    const chartData = [
-          {
-              value: 5,
-              color:"#F7464A",
-              highlight: "#FF5A5E",
-              label: "CUID"
-          },
-          {
-              value: 2,
-              color: "#46BFBD",
-              highlight: "#5AD3D1",
-              label: "ObjectID"
-          },
-    ]
-
     let renderOptions
     if (!this.state.poll.options) {
       renderOptions = (<RadioButton />)
@@ -79,7 +105,7 @@ export default class PollVote extends Component {
             </RadioButtonGroup>
             <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
           </form>
-          <VoteChart data={chartData} />
+          <VoteChart data={this.state.chartData} />
         </Paper>
       </div>
     )
