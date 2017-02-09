@@ -29,16 +29,31 @@ export function getPollByID(req, res) {
   })
 }
 
+export function hasVoted(req, res) {
+  Poll.findOne({
+    _id: req.params.id,
+    userVotes: req.params.userID
+  }, (err, doc) => {
+    if (err) {
+      res.status(500).send(err)
+    }
+    if (doc) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+}
+
 export function updateNumVote(req, res) {
-  console.log('id:', req.params.id)
-  console.log('option id', req.params.voteID)
   Poll.findOneAndUpdate(
     {
       _id: req.params.id,
       'options._id': req.params.voteID
     },
     {
-      $inc: { 'options.$.numVotes': 1 }
+      $inc: { 'options.$.numVotes': 1 },
+      $push: { userVotes: req.body.userID }
     },
     (err, poll) => {
       if (err) {
@@ -50,7 +65,7 @@ export function updateNumVote(req, res) {
 }
 
 export function addPoll(req, res) {
-  if (!req.body.author || !req.body.title || !req.body.options) {
+  if (!req.body.author || !req.body.authorID || !req.body.title || !req.body.options) {
     res.status(403).end()
   }
 
@@ -58,6 +73,7 @@ export function addPoll(req, res) {
 
   // Sanitize inputs
   newPoll.author = sanitizeHtml(newPoll.author)
+  newPoll.authorID = sanitizeHtml(newPoll.authorID)
   newPoll.title = sanitizeHtml(newPoll.title)
   // // TODO: Sanitize the options without throwing error
   // // newPoll.options = sanitizeHtml(newPoll.options)

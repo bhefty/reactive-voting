@@ -28,7 +28,8 @@ class Home extends Component {
 
   onSubmit(formData) {
     const pollData = {
-      author: this.state.profile.user_id,
+      author: this.state.profile.name,
+      authorID: this.state.profile.user_id,
       title: formData.pollName
     }
     let choices = Object.values(formData).splice(1)

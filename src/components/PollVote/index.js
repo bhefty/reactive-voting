@@ -6,14 +6,17 @@ import RaisedButton from 'material-ui/RaisedButton'
 import VoteChart from '../VoteChart'
 
 export default class PollVote extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       poll: {},
       selected: '',
-      chartData: []
+      hasVoted: false,
+      chartData: [],
+      profile: props.auth.getProfile()
     }
     this.getPollInfo = this.getPollInfo.bind(this)
+    this.getVoteStatus = this.getVoteStatus.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.setChartData = this.setChartData.bind(this)
     this.dynamicColors = this.dynamicColors.bind(this)
@@ -32,7 +35,25 @@ export default class PollVote extends Component {
     })
       .then(response => response.json())
       .then((poll) => this.setState({poll: poll}))
-      .then(() => this.setChartData())
+      .then(() => this.getVoteStatus())
+  }
+
+  getVoteStatus() {
+    fetch(`/api/poll/${this.props.params.pollID}/${this.state.profile.user_id}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then((status) => this.setState({ hasVoted: status }))
+      .then(() => {
+        if (this.state.hasVoted) {
+          this.setChartData()
+        } else {
+          // TODO: add placeholder render of chartData until user votes
+        }
+      })
   }
 
   setChartData() {
@@ -68,10 +89,14 @@ export default class PollVote extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    let userInfo = {
+      userID: this.state.profile.user_id
+    }
     fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
       method: 'post',
+      body: JSON.stringify(userInfo),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
       }
     })
       .then(() => this.getPollInfo())
