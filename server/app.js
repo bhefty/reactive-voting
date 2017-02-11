@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 import polls from './routes/polls.routes'
-// import dummyData from './dummyData'
+import dummyData from './util/dummyData'
 
 const app = new Express()
 console.log('env', process.env.NODE_ENV)
@@ -17,7 +17,7 @@ mongoose.connect(MONGO_URI, (error) => {
     throw error
   }
   console.log('Connected to DB!')
-  // dummyData()
+  dummyData()
 })
 
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
