@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Paper from 'material-ui/Paper'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog'
 
 import VoteChart from '../VoteChart'
 
@@ -13,17 +14,28 @@ export default class PollVote extends Component {
       selected: '',
       hasVoted: false,
       chartData: [],
-      profile: props.auth.getProfile()
+      profile: props.auth.getProfile(),
+      alert: false
     }
     this.getPollInfo = this.getPollInfo.bind(this)
     this.getVoteStatus = this.getVoteStatus.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.setChartData = this.setChartData.bind(this)
     this.dynamicColors = this.dynamicColors.bind(this)
+    this.handleOpenAlert = this.handleOpenAlert.bind(this)
+    this.handleCloseAlert = this.handleCloseAlert.bind(this)
   }
 
   componentDidMount() {
     this.getPollInfo()
+  }
+
+  handleOpenAlert() {
+    this.setState({ alert: true })
+  }
+
+  handleCloseAlert() {
+    this.setState({ alert: false })
   }
 
   getPollInfo() {
@@ -101,6 +113,8 @@ export default class PollVote extends Component {
         }
       })
         .then(() => this.getPollInfo())
+    } else {
+      this.handleOpenAlert()
     }
   }
 
@@ -120,11 +134,27 @@ export default class PollVote extends Component {
         )
       })
     }
+
+    const alertActions = [
+      <RaisedButton
+        label='Dismiss'
+        primary={true}
+        onTouchTap={this.handleCloseAlert}
+      />
+    ]
     return (
       <div>
         <h2>{this.state.poll.title}</h2>
         <p>by: {this.state.poll.author}</p>
         <Paper zDepth={2}>
+          <Dialog
+            actions={alertActions}
+            modal={false}
+            open={this.state.alert}
+            onRequestClose={this.handleCloseAlert}
+          >
+            Sorry, only one vote per user!
+          </Dialog>
           <form onSubmit={this.handleSubmit}>
             <h4>Cast your vote:</h4>
             <RadioButtonGroup name='pollOptions'>
