@@ -54,7 +54,6 @@ class Home extends Component {
     }
   }
   render() {
-    console.log('profile', this.state.profile)
     let renderView
     if (this.state.dashboardView === 'newPollForm') {
       renderView = (
@@ -62,7 +61,7 @@ class Home extends Component {
       )
     } else if (this.state.dashboardView === 'myPolls') {
       renderView = (
-        <MyPolls author={this.state.profile.user_id}/>
+        <MyPolls authorID={this.state.profile.user_id}/>
       )
     } else if (this.state.dashboardView === 'pollSubmitted') {
       renderView = (

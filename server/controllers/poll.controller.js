@@ -12,7 +12,7 @@ export function getPolls(req, res) {
 }
 
 export function getPollsByAuthor(req, res) {
-  Poll.find({ author: req.params.author }, (err, polls) => {
+  Poll.find({ authorID: req.params.authorID }, (err, polls) => {
     if (err) {
       res.status(500).send(err)
     }

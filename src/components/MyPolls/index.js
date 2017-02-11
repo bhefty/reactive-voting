@@ -23,7 +23,7 @@ class MyPolls extends Component {
 
   getPollList() {
     let newPolls = this.state.myPolls
-    fetch(`/api/polls/${this.props.author}`, {
+    fetch(`/api/polls/${this.props.authorID}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json'

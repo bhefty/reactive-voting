@@ -6,7 +6,7 @@ const router = new Router()
 router.route('/polls').get(PollController.getPolls)
 
 // Get all Polls by Author
-router.route('/polls/:author').get(PollController.getPollsByAuthor)
+router.route('/polls/:authorID').get(PollController.getPollsByAuthor)
 
 // Get specific Poll by ID
 router.route('/poll/:id').get(PollController.getPollByID)
