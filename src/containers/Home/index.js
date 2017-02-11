@@ -54,6 +54,7 @@ class Home extends Component {
     }
   }
   render() {
+    console.log('profile', this.state.profile)
     let renderView
     if (this.state.dashboardView === 'newPollForm') {
       renderView = (

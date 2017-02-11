@@ -8,7 +8,7 @@ import polls from './routes/polls.routes'
 import dummyData from './util/dummyData'
 
 const app = new Express()
-console.log('env', process.env.NODE_ENV)
+
 mongoose.Promise = global.Promise
 const MONGO_URI = process.env.REACT_APP_MONGO_URI || `mongodb://localhost/reactive-voting-${process.env.NODE_ENV}`
 mongoose.connect(MONGO_URI, (error) => {

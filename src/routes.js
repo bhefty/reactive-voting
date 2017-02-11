@@ -9,7 +9,6 @@ import Welcome from './components/Welcome'
 import Polls from './components/Polls'
 import PollVote from './components/PollVote'
 
-console.log('process', process.env)
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN
 const options = {
