@@ -44,7 +44,7 @@ class Navigation extends Component {
     } else {
       renderAuthButton = (
         <Nav pullRight>
-          <LinkContainer to='login'>
+          <LinkContainer to='/login'>
             <NavItem eventKey={2}>Login</NavItem>
           </LinkContainer>
         </Nav>
@@ -62,6 +62,11 @@ class Navigation extends Component {
               <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
+              <Nav>
+                <LinkContainer to='/polls'>
+                  <NavItem>Polls</NavItem>
+                </LinkContainer>
+              </Nav>
               {renderAuthButton}
             </Navbar.Collapse>
           </Grid>

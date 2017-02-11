@@ -11,6 +11,9 @@ router.route('/polls/:author').get(PollController.getPollsByAuthor)
 // Get specific Poll by ID
 router.route('/poll/:id').get(PollController.getPollByID)
 
+// Get vote status of user on a Poll
+router.route('/poll/:id/:userID').get(PollController.hasVoted)
+
 // Update numVote on Poll option
 router.route('/poll/:id/:voteID').post(PollController.updateNumVote)
 

@@ -8,11 +8,18 @@ const optionsSchema = new Schema({
   numVotes: { type: 'Number', default: 0, required: true }
 })
 
+const userSchema = new Schema({
+  _id: { type: 'String', required: true, unique: true, default: cuid},
+  userID: { type: 'String' }
+})
+
 const pollSchema = new Schema({
   _id: { type: 'String', required: true, unique: true, default: cuid},
   author: { type: 'String', required: true },
+  authorID: { type: 'String', required: true },
   title: { type: 'String', required: true },
   options: { type: [optionsSchema], required: true },
+  userVotes: { type: [userSchema] },
   dateAdded: { type: 'Date', default: Date.now, required: true }
 })
 
