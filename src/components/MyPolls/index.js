@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import Paper from 'material-ui/Paper'
 import {List, ListItem} from 'material-ui/List'
 import DeleteIcon from '../DeleteIcon'
 import { red500 } from 'material-ui/styles/colors'
+
 
 import Wrapper from './Wrapper'
 import H1 from './H1'
@@ -40,8 +42,9 @@ class MyPolls extends Component {
       })
   }
 
-  handleDelete(poll, idx) {
-    fetch(`/api/polls/remove/${poll.cuid}`, {
+  handleDelete(e, poll, idx) {
+    e.stopPropagation()
+    fetch(`/api/polls/remove/${poll._id}`, {
       method: 'delete'
     })
       .then(() => {
@@ -63,7 +66,8 @@ class MyPolls extends Component {
           <ListItem
             key={idx}
             primaryText={poll.title}
-            rightIcon={<DeleteIcon hoverColor={red500} onClick={() => this.handleDelete(poll, idx)} />}
+            onClick={() => browserHistory.push(`/polls/${poll._id}`)}
+            rightIcon={<DeleteIcon hoverColor={red500} onClick={(e) => this.handleDelete(e, poll, idx)} />}
           />
         )
       })
