@@ -89,17 +89,19 @@ export default class PollVote extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    let userInfo = {
-      userID: this.state.profile.user_id
-    }
-    fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
-      method: 'post',
-      body: JSON.stringify(userInfo),
-      headers: {
-        'Content-Type': 'application/json'
+    if (!this.state.hasVoted) {
+      let userInfo = {
+        userID: this.state.profile.user_id
       }
-    })
-      .then(() => this.getPollInfo())
+      fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
+        method: 'post',
+        body: JSON.stringify(userInfo),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(() => this.getPollInfo())
+    }
   }
 
   render() {
