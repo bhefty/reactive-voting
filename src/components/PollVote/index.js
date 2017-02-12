@@ -223,7 +223,7 @@ export default class PollVote extends Component {
               </OptionWrapper>
               <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
             </form>
-            { this.state.authedUser ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
+            { (this.state.authedUser && !this.state.hasVoted) ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
             <VoteChart data={this.state.chartData} />
             <ShareLinks link={window.location.href} />
             {
