@@ -13,6 +13,7 @@ import NewOptionForm from '../NewOptionForm'
 import Wrapper from './Wrapper'
 import VoteWrapper from './VoteWrapper'
 import OptionWrapper from './OptionWrapper'
+import ButtonWrapper from './ButtonWrapper'
 import H2 from './H2'
 import H4 from './H4'
 import P from './P'
@@ -206,39 +207,58 @@ export default class PollVote extends Component {
         <P>by: {this.state.poll.author}</P>
         <Paper zDepth={2} style={{'backgroundColor': '#f8f8f8'}}>
           <VoteWrapper>
-            <Dialog
-              actions={alertActions}
-              modal={false}
-              open={this.state.alert}
-              onRequestClose={this.handleCloseAlert}
-            >
-              Sorry, only one vote per user!
-            </Dialog>
-            <form onSubmit={this.handleSubmit}>
-              <H4>Cast your vote:</H4>
-              <OptionWrapper>
-                <RadioButtonGroup name='pollOptions'>
-                  {renderOptions}
-                </RadioButtonGroup>
-              </OptionWrapper>
-              <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
-            </form>
-            { (this.state.authedUser && !this.state.hasVoted) ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
-            <VoteChart data={this.state.chartData} />
-            <ShareLinks link={window.location.href} />
-            {
-              (this.state.profile.user_id === this.state.poll.authorID) ?
-                <RaisedButton
-                  backgroundColor='red'
-                  labelColor='#fff'
-                  label='Delete this Poll'
-                  onClick={this.handleDelete}
-                  containerElement={<Link to='/' />}
-                />
-                : ''
-            }
+            <div className='container-fluid row'>
+              <div className='col-md-6'>
+                <Dialog
+                  actions={alertActions}
+                  modal={false}
+                  open={this.state.alert}
+                  onRequestClose={this.handleCloseAlert}
+                >
+                  Sorry, only one vote per user!
+                </Dialog>
+                <form onSubmit={this.handleSubmit}>
+                  <H4>Cast your vote:</H4>
+                  <OptionWrapper>
+                    <RadioButtonGroup name='pollOptions'>
+                      {renderOptions}
+                    </RadioButtonGroup>
+                  </OptionWrapper>
+                  <ButtonWrapper>
+                    <RaisedButton fullWidth type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
+                  </ButtonWrapper>
+                </form>
+                <ButtonWrapper>
+                  { (this.state.authedUser && !this.state.hasVoted) ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
+                </ButtonWrapper>
+              </div>
+              <div className='col-md-6'>
+                <VoteChart data={this.state.chartData} votes={this.state.poll.options} />
+              </div>
+
+            </div>
           </VoteWrapper>
         </Paper>
+        <div className='row'>
+        <div className='col-sm-6 col-md-3'>
+          <ShareLinks link={window.location.href} />
+        </div>
+
+          {
+            (this.state.profile.user_id === this.state.poll.authorID) ?
+            <div className='col-sm-6 col-md-3 col-md-offset-6'>
+              <RaisedButton
+                fullWidth
+                backgroundColor='red'
+                labelColor='#fff'
+                label='Delete this Poll'
+                onClick={this.handleDelete}
+                containerElement={<Link to='/' />}
+              />
+            </div>
+              : ''
+          }
+        </div>
       </Wrapper>
     )
   }

@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { Doughnut } from 'react-chartjs'
 
+import Wrapper from './Wrapper'
+import UL from './UL'
+import LI from './LI'
+import P from './P'
+
 export default class VoteChart extends Component {
   constructor() {
     super()
@@ -14,17 +19,17 @@ export default class VoteChart extends Component {
   }
 
   render() {
-    let { data } = this.props
+    let { data, votes } = this.props
     let datasets = data.map((ds, idx) => {
-      return <li key={idx}><span style={{ backgroundColor: ds.color }}>&nbsp;</span> {ds.label}</li>
+      return <LI key={idx} style={{ border: `solid ${ds.color} 1em` }}><em>{ds.label}</em><P><b>Votes: {votes[idx].numVotes}</b></P></LI>
     })
     return (
-      <div>
-        <Doughnut ref={(ref) => this.ref = ref} data={this.props.data} />
-        <ul>
+      <Wrapper>
+        <Doughnut ref={(ref) => this.ref = ref} data={this.props.data} height='300em' width='300em' />
+        <UL>
           {datasets}
-        </ul>
-      </div>
+        </UL>
+      </Wrapper>
     )
   }
 }

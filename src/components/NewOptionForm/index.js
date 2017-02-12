@@ -35,10 +35,12 @@ export default class NewOptionForm extends Component {
                 floatingLabelText='Additional Option'
                 onChange={this.handleChange}
               />
-              <RaisedButton type='submit' label='Add custom option' />
+              <RaisedButton type='submit' label='Vote on new option' primary={true} />
             </form>
           :
             <RaisedButton
+              fullWidth
+              primary={true}
               label='Make new option'
               onClick={() => this.setState({showForm: true})}
             />
