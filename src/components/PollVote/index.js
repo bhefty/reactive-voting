@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 import Paper from 'material-ui/Paper'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -29,6 +30,7 @@ export default class PollVote extends Component {
     this.handleOpenAlert = this.handleOpenAlert.bind(this)
     this.handleCloseAlert = this.handleCloseAlert.bind(this)
     this.addCustom = this.addCustom.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
@@ -161,6 +163,12 @@ export default class PollVote extends Component {
     }
   }
 
+  handleDelete() {
+    fetch(`/api/polls/remove/${this.props.params.pollID}`, {
+      method: 'delete'
+    })
+  }
+
   render() {
     let renderOptions
     if (!this.state.poll.options) {
@@ -208,6 +216,17 @@ export default class PollVote extends Component {
           { this.state.authedUser ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
           <VoteChart data={this.state.chartData} />
           <ShareLinks link={window.location.href} />
+          {
+            (this.state.profile.user_id === this.state.poll.authorID) ?
+              <RaisedButton
+                backgroundColor='red'
+                labelColor='#fff'
+                label='Delete this Poll'
+                onClick={this.handleDelete}
+                containerElement={<Link to='/' />}
+              />
+              : ''
+          }
         </Paper>
       </div>
     )
