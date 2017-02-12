@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
 
 import VoteChart from '../VoteChart'
+import ShareLinks from '../ShareLinks'
 
 export default class PollVote extends Component {
   constructor(props) {
@@ -163,6 +164,7 @@ export default class PollVote extends Component {
             <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
           </form>
           <VoteChart data={this.state.chartData} />
+          <ShareLinks link={window.location.href} />
         </Paper>
       </div>
     )

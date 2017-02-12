@@ -70,7 +70,10 @@ export function addPoll(req, res) {
   }
 
   const newPoll = new Poll(req.body)
-
+  if (req.body._id) {
+    console.log('id is', req.body._id)
+    newPoll._id = sanitizeHtml(newPoll._id)
+  }
   // Sanitize inputs
   newPoll.author = sanitizeHtml(newPoll.author)
   newPoll.authorID = sanitizeHtml(newPoll.authorID)

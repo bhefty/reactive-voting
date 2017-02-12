@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import RaisedButton from 'material-ui/RaisedButton'
+import cuid from 'cuid'
 
 import NewPollForm from '../../components/NewPollForm'
 import MyPolls from '../../components/MyPolls'
@@ -20,7 +21,8 @@ class Home extends Component {
     super(props)
     this.state = {
       dashboardView: 'newPollForm',
-      profile: props.auth.getProfile()
+      profile: props.auth.getProfile(),
+      pollID: ''
     }
     this.handleView = this.handleView.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
@@ -28,10 +30,12 @@ class Home extends Component {
 
   onSubmit(formData) {
     const pollData = {
+      _id: cuid(),
       author: this.state.profile.name,
       authorID: this.state.profile.user_id,
       title: formData.pollName
     }
+    this.setState({ pollID: pollData._id })
     let choices = Object.values(formData).splice(1)
     pollData.options = choices.map((choice) => {
       return { choice: choice }
@@ -65,7 +69,7 @@ class Home extends Component {
       )
     } else if (this.state.dashboardView === 'pollSubmitted') {
       renderView = (
-        <PollSubmitted />
+        <PollSubmitted pollID={this.state.pollID} />
       )
     }
     return (
