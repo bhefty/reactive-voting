@@ -16,6 +16,7 @@ Below are the project requirements from FreeCodeCamp's curriculum.
 
 ### Setup this project
 Ensure you have Node and MongoDB installed then clone/fork this repo. Then install the dependencies:
+
 `npm install`
 
 ### Run project
