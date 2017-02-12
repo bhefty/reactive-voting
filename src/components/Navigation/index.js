@@ -1,5 +1,5 @@
 import React, { Component, PropTypes as T } from 'react'
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import { Grid, Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
@@ -44,9 +44,7 @@ class Navigation extends Component {
     } else {
       renderAuthButton = (
         <Nav pullRight>
-          <LinkContainer to='/login'>
-            <NavItem eventKey={2}>Login</NavItem>
-          </LinkContainer>
+          <NavItem eventKey={2} onClick={() => browserHistory.replace('login')}>Login</NavItem>
         </Nav>
       )
     }

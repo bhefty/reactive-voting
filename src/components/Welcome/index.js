@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { browserHistory } from 'react-router'
 import { FormattedMessage } from 'react-intl';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontAwesome from 'react-fontawesome'
@@ -24,7 +24,7 @@ function Welcome() {
           <FormattedMessage {...messages.welcomeMessage} />
         </P>
         <ButtonWrapper>
-          <RaisedButton fullWidth backgroundColor='#58B957' labelColor='#fff' containerElement={<Link to="/login" />} label='Signup' />
+          <RaisedButton fullWidth backgroundColor='#58B957' labelColor='#fff' onClick={() => browserHistory.replace('login')} label='Signup' />
         </ButtonWrapper>
       </Wrapper>
 
