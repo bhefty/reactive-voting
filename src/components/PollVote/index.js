@@ -18,6 +18,7 @@ export default class PollVote extends Component {
       hasVoted: false,
       chartData: [],
       profile: props.auth.getProfile(),
+      authedUser: props.auth.loggedIn(),
       alert: false
     }
     this.getPollInfo = this.getPollInfo.bind(this)
@@ -31,6 +32,11 @@ export default class PollVote extends Component {
   }
 
   componentDidMount() {
+    if (!this.state.authedUser) {
+      if (!localStorage.getItem('anonUserID')) {
+        localStorage.setItem('anonUserID', cuid())
+      }
+    }
     this.getPollInfo()
   }
 
@@ -55,7 +61,8 @@ export default class PollVote extends Component {
   }
 
   getVoteStatus() {
-    fetch(`/api/poll/${this.props.params.pollID}/${this.state.profile.user_id}`, {
+    const user_id = this.state.profile.user_id || localStorage.getItem('anonUserID')
+    fetch(`/api/poll/${this.props.params.pollID}/${user_id}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json'
@@ -107,7 +114,7 @@ export default class PollVote extends Component {
     event.preventDefault()
     if (!this.state.hasVoted) {
       let userInfo = {
-        userID: this.state.profile.user_id
+        userID: this.state.profile.user_id || localStorage.getItem('anonUserID')
       }
       fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
         method: 'post',
@@ -123,31 +130,35 @@ export default class PollVote extends Component {
   }
 
   addCustom(choiceText) {
-    const newOption = {
-      _id: cuid(),
-      choice: choiceText,
-      numVotes: 0
-    }
-    fetch(`/api/polls/addoption/${this.props.params.pollID}`, {
-      method: 'post',
-      body: JSON.stringify(newOption),
-      headers: {
-        'Content-Type': 'application/json'
+    if (!this.state.hasVoted) {
+      const newOption = {
+        _id: cuid(),
+        choice: choiceText,
+        numVotes: 0
       }
-    })
-      .then(() => {
-        let userInfo = {
-          userID: this.state.profile.user_id
+      fetch(`/api/polls/addoption/${this.props.params.pollID}`, {
+        method: 'post',
+        body: JSON.stringify(newOption),
+        headers: {
+          'Content-Type': 'application/json'
         }
-        fetch(`/api/poll/${this.props.params.pollID}/${newOption._id}`, {
-          method: 'post',
-          body: JSON.stringify(userInfo),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(() => this.getPollInfo())
       })
+        .then(() => {
+          let userInfo = {
+            userID: this.state.profile.user_id || localStorage.getItem('anonUserID')
+          }
+          fetch(`/api/poll/${this.props.params.pollID}/${newOption._id}`, {
+            method: 'post',
+            body: JSON.stringify(userInfo),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(() => this.getPollInfo())
+        })
+    } else {
+      this.handleOpenAlert()
+    }
   }
 
   render() {
@@ -194,7 +205,7 @@ export default class PollVote extends Component {
             </RadioButtonGroup>
             <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
           </form>
-          <NewOptionForm onSubmit={this.addCustom} />
+          { this.state.authedUser ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
           <VoteChart data={this.state.chartData} />
           <ShareLinks link={window.location.href} />
         </Paper>
