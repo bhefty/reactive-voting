@@ -36,7 +36,11 @@ class Home extends Component {
       title: formData.pollName
     }
     this.setState({ pollID: pollData._id })
-    let choices = Object.values(formData).splice(1)
+    // let choices = Object.values(formData).splice(1)
+    let choices = Object.keys(formData).map((choice) => {
+      return formData[choice]
+    }).splice(1)
+
     pollData.options = choices.map((choice) => {
       return { choice: choice }
     })
