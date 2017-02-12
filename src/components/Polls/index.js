@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import Paper from 'material-ui/Paper'
-import {List, ListItem} from 'material-ui/List'
-import { Link } from 'react-router'
+import Divider from 'material-ui/Divider'
+import {List} from 'material-ui/List'
+
+import PollItem from '../PollItem'
+
+import Wrapper from './Wrapper'
+import H1 from './H1'
 
 class Polls extends Component {
   constructor() {
@@ -39,23 +44,25 @@ class Polls extends Component {
       renderView = (<h4 style={{textAlign: 'center'}}>Loading polls...</h4>)
     } else {
       renderView = this.state.polls.map((poll, idx) => {
+        let lastItem = false
+        if ((idx + 1) === this.state.polls.length) {
+          lastItem = true
+        }
         return (
-          <ListItem
-            key={idx}
-            primaryText={poll.title}
-            containerElement={<Link to={`/polls/${poll._id}`} />}
-          />
+          <PollItem key={idx} poll={poll} final={lastItem} />
         )
       })
     }
     return (
-      <div>
+      <Wrapper>
         <Paper zDepth={1} rounded={false}>
+          <H1>All Polls</H1>
+          <Divider />
           <List>
             {renderView}
           </List>
         </Paper>
-      </div>
+      </Wrapper>
     )
   }
 }
