@@ -3,7 +3,6 @@ import ShareLinks from '../ShareLinks'
 
 function PollSubmitted(props) {
   const address = `${window.location.origin}/polls/${props.pollID}`
-  console.log('address', address)
   return (
     <div style={{textAlign: 'center'}}>
       <h1>Congratulations!</h1>

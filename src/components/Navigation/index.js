@@ -53,7 +53,7 @@ class Navigation extends Component {
 
     return (
       <div>
-        <Navbar staticTop>
+        <Navbar staticTop collapseOnSelect={true} >
           <Grid>
             <Navbar.Header>
               <Navbar.Brand>
