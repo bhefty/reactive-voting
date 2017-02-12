@@ -1,5 +1,4 @@
 import Poll from '../models/poll'
-import cuid from 'cuid'
 import sanitizeHtml from 'sanitize-html'
 
 export function getPolls(req, res) {
@@ -71,15 +70,12 @@ export function addPoll(req, res) {
 
   const newPoll = new Poll(req.body)
   if (req.body._id) {
-    console.log('id is', req.body._id)
     newPoll._id = sanitizeHtml(newPoll._id)
   }
-  // Sanitize inputs
+
   newPoll.author = sanitizeHtml(newPoll.author)
   newPoll.authorID = sanitizeHtml(newPoll.authorID)
   newPoll.title = sanitizeHtml(newPoll.title)
-  // // TODO: Sanitize the options without throwing error
-  // // newPoll.options = sanitizeHtml(newPoll.options)
 
   newPoll.save((err, saved) => {
     if (err) {
@@ -88,6 +84,25 @@ export function addPoll(req, res) {
     }
     res.send(saved)
   })
+}
+
+export function addOption(req, res) {
+  console.log('params', req.params.id)
+  console.log('body', req.body)
+  Poll.findOneAndUpdate(
+    {
+      _id: req.params.id
+    },
+    {
+      $push: { options: req.body}
+    },
+    (err, poll) => {
+      if (err) {
+        res.status(500).send(err)
+      }
+      res.send(poll)
+    }
+  )
 }
 
 export function deletePoll(req, res) {

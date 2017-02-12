@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 export default class ShareLinks extends Component {
   render() {
-    console.log(this.props.link)
     return (
       <div>
         <RaisedButton

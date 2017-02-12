@@ -20,6 +20,9 @@ router.route('/poll/:id/:voteID').post(PollController.updateNumVote)
 // Add a new Poll
 router.route('/polls').post(PollController.addPoll)
 
+// Add option to Poll
+router.route('/polls/addoption/:id').post(PollController.addOption)
+
 // Delete a Poll
 router.route('/polls/remove/:id').delete(PollController.deletePoll)
 

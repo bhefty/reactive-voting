@@ -3,9 +3,11 @@ import Paper from 'material-ui/Paper'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
+import cuid from 'cuid'
 
 import VoteChart from '../VoteChart'
 import ShareLinks from '../ShareLinks'
+import NewOptionForm from '../NewOptionForm'
 
 export default class PollVote extends Component {
   constructor(props) {
@@ -16,6 +18,7 @@ export default class PollVote extends Component {
       hasVoted: false,
       chartData: [],
       profile: props.auth.getProfile(),
+      authedUser: props.auth.loggedIn(),
       alert: false
     }
     this.getPollInfo = this.getPollInfo.bind(this)
@@ -25,9 +28,15 @@ export default class PollVote extends Component {
     this.dynamicColors = this.dynamicColors.bind(this)
     this.handleOpenAlert = this.handleOpenAlert.bind(this)
     this.handleCloseAlert = this.handleCloseAlert.bind(this)
+    this.addCustom = this.addCustom.bind(this)
   }
 
   componentDidMount() {
+    if (!this.state.authedUser) {
+      if (!localStorage.getItem('anonUserID')) {
+        localStorage.setItem('anonUserID', cuid())
+      }
+    }
     this.getPollInfo()
   }
 
@@ -52,7 +61,8 @@ export default class PollVote extends Component {
   }
 
   getVoteStatus() {
-    fetch(`/api/poll/${this.props.params.pollID}/${this.state.profile.user_id}`, {
+    const user_id = this.state.profile.user_id || localStorage.getItem('anonUserID')
+    fetch(`/api/poll/${this.props.params.pollID}/${user_id}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json'
@@ -104,7 +114,7 @@ export default class PollVote extends Component {
     event.preventDefault()
     if (!this.state.hasVoted) {
       let userInfo = {
-        userID: this.state.profile.user_id
+        userID: this.state.profile.user_id || localStorage.getItem('anonUserID')
       }
       fetch(`/api/poll/${this.props.params.pollID}/${this.state.selected}`, {
         method: 'post',
@@ -114,6 +124,38 @@ export default class PollVote extends Component {
         }
       })
         .then(() => this.getPollInfo())
+    } else {
+      this.handleOpenAlert()
+    }
+  }
+
+  addCustom(choiceText) {
+    if (!this.state.hasVoted) {
+      const newOption = {
+        _id: cuid(),
+        choice: choiceText,
+        numVotes: 0
+      }
+      fetch(`/api/polls/addoption/${this.props.params.pollID}`, {
+        method: 'post',
+        body: JSON.stringify(newOption),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(() => {
+          let userInfo = {
+            userID: this.state.profile.user_id || localStorage.getItem('anonUserID')
+          }
+          fetch(`/api/poll/${this.props.params.pollID}/${newOption._id}`, {
+            method: 'post',
+            body: JSON.stringify(userInfo),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(() => this.getPollInfo())
+        })
     } else {
       this.handleOpenAlert()
     }
@@ -163,6 +205,7 @@ export default class PollVote extends Component {
             </RadioButtonGroup>
             <RaisedButton type='submit' backgroundColor='#58B957' labelColor='#fff' label='Submit' />
           </form>
+          { this.state.authedUser ? <NewOptionForm onSubmit={this.addCustom} /> : ''}
           <VoteChart data={this.state.chartData} />
           <ShareLinks link={window.location.href} />
         </Paper>
