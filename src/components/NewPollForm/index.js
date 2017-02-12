@@ -116,7 +116,7 @@ class NewPollForm extends Component {
           <FloatingActionButton mini={true} style={{ margin: '20px' }}>
             <ContentAdd onClick={() => this.addOption()} />
           </FloatingActionButton>
-          <RaisedButton type='submit' style={styles.submitButtonStyle} backgroundColor='#58B957' labelColor='#fff' label='Submit' />
+          <RaisedButton type='submit' onTouchTap={this.handleSubmit} style={styles.submitButtonStyle} backgroundColor='#58B957' labelColor='#fff' label='Submit' />
         </form>
       </Wrapper>
     )
