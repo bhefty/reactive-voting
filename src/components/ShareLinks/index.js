@@ -4,13 +4,14 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 export default class ShareLinks extends Component {
   render() {
+    const text = 'Checkout and vote on this poll!'
     return (
       <div>
         <RaisedButton
           fullWidth
           backgroundColor='#4099FF'
           onClick={() => {
-            window.open(`http://twitter.com/share?text=Tweet test&url=${this.props.link}`, '',
+            window.open(`http://twitter.com/share?text=${text}&url=${this.props.link}`, '',
              'menubar=no, toolbar=no, resizable=yes, scrollbars=yes, height=300, width=600')
           }}
         >

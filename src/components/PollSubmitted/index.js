@@ -1,6 +1,8 @@
 import React from 'react'
 import ShareLinks from '../ShareLinks'
 
+import ShareWrapper from './ShareWrapper'
+
 function PollSubmitted(props) {
   const address = `${window.location.origin}/polls/${props.pollID}`
   return (
@@ -9,7 +11,9 @@ function PollSubmitted(props) {
       <p>
         Your poll has been submitted.
       </p>
-      <ShareLinks link={address} />
+      <ShareWrapper>
+        <ShareLinks link={address} />
+      </ShareWrapper>
       <p>
         Or, share the following link!
       </p>
